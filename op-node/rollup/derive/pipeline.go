@@ -125,12 +125,13 @@ func (dp *DerivationPipeline) Origin() eth.L1BlockRef {
 // An error is expected when the underlying source closes.
 // When Step returns nil, it should be called again, to continue the derivation process.
 func (dp *DerivationPipeline) Step(ctx context.Context) error {
-	log.Info("try derive pipeline step")
 	var err error
 	defer func() {
 		dp.metrics.RecordL1Ref("l1_derived", dp.Origin())
 		if err != nil {
 			log.Error("try derive pipeline step failed", "Error", err)
+		} else {
+			log.Info("try derive pipeline step success")
 		}
 	}()
 	// if any stages need to be reset, do that first.
