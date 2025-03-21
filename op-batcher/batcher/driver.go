@@ -616,8 +616,10 @@ func (l *BatchSubmitter) publishTxToL1(ctx context.Context, queue *txmgr.Queue[t
 	}
 
 	if err = l.sendTransaction(ctx, txdata, queue, receiptsCh); err != nil {
+		log.Info("failed  to send the batcher txn", "err", err)
 		return fmt.Errorf("BatchSubmitter.sendTransaction failed: %w", err)
 	}
+	log.Info("succeed  to send the batcher txn")
 	return nil
 }
 

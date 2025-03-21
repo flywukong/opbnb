@@ -484,7 +484,8 @@ func (s *L2Batcher) ActL2BatchSubmitGarbage(t Testing, kind GarbageKind) {
 func (s *L2Batcher) ActBufferAll(t Testing) {
 	stat, err := s.syncStatusAPI.SyncStatus(t.Ctx())
 	require.NoError(t, err)
-	log.Info("act buffer all1")
+	log.Info("act buffer all1", "l2 bufferd block", s.l2BufferedBlock.Number,
+		"usafe number", stat.UnsafeL2.Number)
 	for s.l2BufferedBlock.Number < stat.UnsafeL2.Number {
 		log.Info("act buffer all2")
 		s.ActL2BatchBuffer(t)
