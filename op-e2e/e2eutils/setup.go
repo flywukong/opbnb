@@ -61,6 +61,8 @@ func MakeDeployParams(t require.TestingT, tp *TestParams) *DeployParams {
 	deployConfig.SequencerWindowSize = tp.SequencerWindowSize
 	deployConfig.ChannelTimeout = tp.ChannelTimeout
 	deployConfig.L1BlockTime = tp.L1BlockTime
+	// convert L1 block time to ms
+	deployConfig.L1BlockTime = deployConfig.L1MillisecondBlockInterval()
 	deployConfig.UsePlasma = tp.UsePlasma
 	deployConfig.L1GenesisBlockBaseFeePerGas = (*hexutil.Big)(bsc.DefaultBaseFee)
 	ApplyDeployConfigForks(deployConfig)
@@ -107,6 +109,8 @@ func Ether(v uint64) *big.Int {
 func Setup(t require.TestingT, deployParams *DeployParams, alloc *AllocParams) *SetupData {
 	deployConf := deployParams.DeployConfig.Copy()
 	deployConf.L1GenesisBlockTimestamp = hexutil.Uint64(time.Now().Unix())
+	deployConf.L1BlockTime = deployConf.L1MillisecondBlockInterval()
+	deployConf.L2BlockTime = deployConf.L2MillisecondBlockInterval()
 	require.NoError(t, deployConf.Check())
 
 	l1Deployments := config.L1Deployments.Copy()

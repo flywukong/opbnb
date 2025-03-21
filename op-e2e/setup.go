@@ -106,6 +106,10 @@ func DefaultSystemConfig(t testing.TB) SystemConfig {
 		premine[addr] = new(big.Int).Mul(big.NewInt(1000), big.NewInt(params.Ether))
 	}
 
+	log.Info("default system config123", " l2 block time", deployConfig.L2BlockTime,
+		"l1 block time", deployConfig.L1BlockTime)
+	deployConfig.L2BlockTime = deployConfig.L2MillisecondBlockInterval()
+	deployConfig.L1BlockTime = deployConfig.L1MillisecondBlockInterval()
 	return SystemConfig{
 		Secrets:                secrets,
 		Premine:                premine,
