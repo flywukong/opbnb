@@ -49,7 +49,7 @@ func BatchInLastPossibleBlocks(gt *testing.T, deltaTimeOffset *hexutil.Uint64) {
 	applyDeltaTimeOffset(dp, deltaTimeOffset)
 	dp.DeployConfig.SequencerWindowSize = 4
 	dp.DeployConfig.L2BlockTime = 2
-
+	dp.DeployConfig.L2BlockTime = dp.DeployConfig.L2MillisecondBlockInterval()
 	sd := e2eutils.Setup(t, dp, defaultAlloc)
 	log := testlog.Logger(t, log.LevelDebug)
 
