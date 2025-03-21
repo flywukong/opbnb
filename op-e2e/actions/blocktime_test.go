@@ -49,7 +49,7 @@ func BatchInLastPossibleBlocks(gt *testing.T, deltaTimeOffset *hexutil.Uint64) {
 	applyDeltaTimeOffset(dp, deltaTimeOffset)
 	dp.DeployConfig.SequencerWindowSize = 4
 	dp.DeployConfig.L2BlockTime = 2
-	//	dp.DeployConfig.L2BlockTime = dp.DeployConfig.L2MillisecondBlockInterval()
+
 	sd := e2eutils.Setup(t, dp, defaultAlloc)
 	log := testlog.Logger(t, log.LevelDebug)
 
@@ -97,6 +97,7 @@ func BatchInLastPossibleBlocks(gt *testing.T, deltaTimeOffset *hexutil.Uint64) {
 	for i := 0; i < 7; i++ {
 		batcher.ActSubmitAll(t)
 		miner.ActL1StartBlock(4)(t)
+		log.Info("l1 batcher addr", sd.RollupCfg.Genesis.SystemConfig.BatcherAddr)
 		miner.ActL1IncludeTx(sd.RollupCfg.Genesis.SystemConfig.BatcherAddr)(t)
 		miner.ActL1EndBlock(t)
 		sequencer.ActL1HeadSignal(t)
