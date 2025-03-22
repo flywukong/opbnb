@@ -201,7 +201,6 @@ jobs:
 
   op-e2e-http-test:
     runs-on: ubuntu-latest
-    needs: [op-proposer-lint]
 
     steps:
       - name: Check out code
