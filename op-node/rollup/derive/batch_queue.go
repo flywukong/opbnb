@@ -322,14 +322,26 @@ batchLoop:
 	// to preserve that L2 time >= L1 time. If this is the first block of the epoch, always generate a
 	// batch to ensure that we at least have one batch per epoch.
 	if nextMilliTimestamp < nextEpoch.MillisecondTimestamp() || firstOfEpoch {
-		bq.log.Info("Generating next batch", "epoch", epoch, "timestamp", nextMilliTimestamp)
-		return &SingularBatch{
-			ParentHash:   parent.Hash,
-			EpochNum:     rollup.Epoch(epoch.Number),
-			EpochHash:    epoch.Hash,
-			Timestamp:    nextMilliTimestamp,
-			Transactions: nil,
-		}, nil
+		if bq.config.IsVolta(epoch.Time) {
+			bq.log.Info("Generating next batch", "epoch", epoch, "timestamp", nextMilliTimestamp)
+			return &SingularBatch{
+				ParentHash:   parent.Hash,
+				EpochNum:     rollup.Epoch(epoch.Number),
+				EpochHash:    epoch.Hash,
+				Timestamp:    nextMilliTimestamp,
+				Transactions: nil,
+			}, nil
+		} else {
+			bq.log.Info("Generating next batch2", "epoch", epoch, "timestamp", nextMilliTimestamp)
+			nextTimestamp := bq.config.NextSecondBlockTime(parent.MillisecondTimestamp())
+			return &SingularBatch{
+				ParentHash:   parent.Hash,
+				EpochNum:     rollup.Epoch(epoch.Number),
+				EpochHash:    epoch.Hash,
+				Timestamp:    nextTimestamp,
+				Transactions: nil,
+			}, nil
+		}
 	}
 
 	// At this point we have auto generated every batch for the current epoch
