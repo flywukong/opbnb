@@ -254,7 +254,8 @@ func BlockToSingularBatch(rollupCfg *rollup.Config, block *types.Block) (*Singul
 			"timestamp_ms", milliPart, "seconds-timestamp", block.Time(),
 			"l2 block", block.Number(), "l1 origin", l1Info.Number)
 	} else { // before volta fork
-		ts = block.Time()
+		ts = block.Time() * 1000
+		log.Info("singular transform finish batch ", "time", ts)
 	}
 
 	return &SingularBatch{
