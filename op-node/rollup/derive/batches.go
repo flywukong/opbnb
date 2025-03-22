@@ -66,15 +66,27 @@ func checkSingularBatch(cfg *rollup.Config, log log.Logger, l1Blocks []eth.L1Blo
 		return BatchUndecided
 	}
 	epoch := l1Blocks[0]
-
-	nextMilliTimestamp := cfg.NextMillisecondBlockTime(l2SafeHead.MillisecondTimestamp())
-	if batch.Timestamp > nextMilliTimestamp {
-		log.Trace("received out-of-order batch for future processing after next batch", "next_timestamp", nextMilliTimestamp)
-		return BatchFuture
-	}
-	if batch.Timestamp < nextMilliTimestamp {
-		log.Warn("dropping batch with old timestamp", "batch_timestamp", batch.Timestamp, "min_timestamp", nextMilliTimestamp)
-		return BatchDrop
+	
+	if cfg.IsVolta(l2SafeHead.MillisecondTimestamp()) {
+		nextMilliTimestamp := cfg.NextMillisecondBlockTime(l2SafeHead.MillisecondTimestamp())
+		if batch.Timestamp > nextMilliTimestamp {
+			log.Trace("received out-of-order batch for future processing after next batch", "next_timestamp", nextMilliTimestamp)
+			return BatchFuture
+		}
+		if batch.Timestamp < nextMilliTimestamp {
+			log.Warn("dropping batch with old timestamp", "batch_timestamp", batch.Timestamp, "min_timestamp", nextMilliTimestamp)
+			return BatchDrop
+		}
+	} else {
+		nexSecondsTimestamp := cfg.NextSecondBlockTime(l2SafeHead.MillisecondTimestamp())
+		if batch.Timestamp > nexSecondsTimestamp {
+			log.Trace("received out-of-order batch for future processing after next batch", "next_timestamp", nextMilliTimestamp)
+			return BatchFuture
+		}
+		if batch.Timestamp < nexSecondsTimestamp {
+			log.Warn("dropping batch with old timestamp", "batch_timestamp", batch.Timestamp, "min_timestamp", nextMilliTimestamp)
+			return BatchDrop
+		}
 	}
 
 	// dependent on above timestamp check. If the timestamp is correct, then it must build on top of the safe head.
