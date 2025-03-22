@@ -65,7 +65,7 @@ type BatchData struct {
 
 // InnerBatchData is the underlying data of a BatchData.
 // This is implemented by SingularBatch and RawSpanBatch.
-type InnerBatchData interface {
+type  interface {
 	GetBatchType() int
 	encode(w io.Writer) error
 	decode(r *bytes.Reader) error
