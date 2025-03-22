@@ -66,7 +66,7 @@ func checkSingularBatch(cfg *rollup.Config, log log.Logger, l1Blocks []eth.L1Blo
 		return BatchUndecided
 	}
 	epoch := l1Blocks[0]
-	
+
 	if cfg.IsVolta(l2SafeHead.MillisecondTimestamp()) {
 		nextMilliTimestamp := cfg.NextMillisecondBlockTime(l2SafeHead.MillisecondTimestamp())
 		if batch.Timestamp > nextMilliTimestamp {
@@ -80,11 +80,11 @@ func checkSingularBatch(cfg *rollup.Config, log log.Logger, l1Blocks []eth.L1Blo
 	} else {
 		nexSecondsTimestamp := cfg.NextSecondBlockTime(l2SafeHead.MillisecondTimestamp())
 		if batch.Timestamp > nexSecondsTimestamp {
-			log.Trace("received out-of-order batch for future processing after next batch", "next_timestamp", nextMilliTimestamp)
+			log.Trace("received out-of-order batch for future processing after next batch", "next_timestamp", nexSecondsTimestamp)
 			return BatchFuture
 		}
 		if batch.Timestamp < nexSecondsTimestamp {
-			log.Warn("dropping batch with old timestamp", "batch_timestamp", batch.Timestamp, "min_timestamp", nextMilliTimestamp)
+			log.Warn("dropping batch with old timestamp", "batch_timestamp", batch.Timestamp, "min_timestamp", nexSecondsTimestamp)
 			return BatchDrop
 		}
 	}
