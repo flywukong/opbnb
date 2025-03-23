@@ -201,7 +201,7 @@ func checkSpanBatch(ctx context.Context, cfg *rollup.Config, log log.Logger, l1B
 		return BatchFuture
 	}
 	if batch.GetBlockTimestamp(batch.GetBlockCount()-1) < nextMilliTimestamp {
-		log.Warn("span batch has no new blocks after safe head")
+		log.Warn("span batch has no new blocks after safe head123")
 		return BatchDrop
 	}
 

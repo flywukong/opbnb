@@ -511,6 +511,7 @@ func (cfg SystemConfig) Start(t *testing.T, _opts ...SystemConfigOption) (*Syste
 	}
 
 	makeRollupConfig := func() rollup.Config {
+		log.Info("make rollup config ", "block time", cfg.DeployConfig.L2BlockTime)
 		return rollup.Config{
 			Genesis: rollup.Genesis{
 				L1: eth.BlockID{

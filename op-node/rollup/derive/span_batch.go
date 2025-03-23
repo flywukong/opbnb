@@ -513,6 +513,7 @@ func (b *SpanBatch) GetBlockEpochNum(i int) uint64 {
 
 // GetBlockTimestamp returns the timestamp of the block at the given index in the span.
 func (b *SpanBatch) GetBlockTimestamp(i int) uint64 {
+	log.Info("get block", "index", i)
 	return b.Batches[i].Timestamp
 }
 
