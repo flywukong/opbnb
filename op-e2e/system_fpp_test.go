@@ -252,7 +252,7 @@ func testVerifyL2OutputRoot(t *testing.T, detached bool, spanBatchActivated bool
 	l2Output, err := rollupClient.OutputAtBlock(ctx, l2ClaimBlockNumber)
 	require.NoError(t, err, "could not get expected output")
 	l2Claim := l2Output.OutputRoot
-	log.Info("claim l2 output", "root", common.Hash(l2Claim),
+	log.Info("claim l2 output", "clain output root", common.Hash(l2Claim),
 		"stateroot", l2Output.StateRoot, "storage", l2Output.WithdrawalStorageRoot,
 		"l2ClaimBlockNumber", l2ClaimBlockNumber)
 

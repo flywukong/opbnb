@@ -5,6 +5,8 @@ import (
 
 	"github.com/ethereum-optimism/optimism/op-node/bindings"
 	"github.com/ethereum-optimism/optimism/op-service/eth"
+	"github.com/ethereum/go-ethereum/common"
+	"github.com/ethereum/go-ethereum/log"
 )
 
 var ErrNilProof = errors.New("output root proof is nil")
@@ -28,10 +30,14 @@ func ComputeL2OutputRoot(proofElements *bindings.TypesOutputRootProof) (eth.Byte
 
 func ComputeL2OutputRootV0(block eth.BlockInfo, storageRoot [32]byte) (eth.Bytes32, error) {
 	stateRoot := block.Root()
+
 	l2Output := eth.OutputV0{
 		StateRoot:                eth.Bytes32(stateRoot),
 		MessagePasserStorageRoot: storageRoot,
 		BlockHash:                block.Hash(),
 	}
-	return eth.OutputRoot(&l2Output), nil
+	outputRoot := eth.OutputRoot(&l2Output)
+	log.Info(" ComputeL2OutputRootV0  stateroot ", "hash", common.Hash(eth.Bytes32(stateRoot)), "output ROot", common.Hash(outputRoot))
+
+	return outputRoot, nil
 }

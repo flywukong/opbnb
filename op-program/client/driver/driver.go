@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/log"
 
 	"github.com/ethereum-optimism/optimism/op-node/metrics"
@@ -104,11 +105,13 @@ func (d *Driver) SafeHead() eth.L2BlockRef {
 
 func (d *Driver) ValidateClaim(l2ClaimBlockNum uint64, claimedOutputRoot eth.Bytes32) error {
 	l2Head := d.SafeHead()
+	log.Info("validate claim", "l2 claim block", l2ClaimBlockNum, "l2 safe head", l2Head.Number)
 	outputRoot, err := d.l2OutputRoot(min(l2ClaimBlockNum, l2Head.Number))
 	if err != nil {
 		return fmt.Errorf("calculate L2 output root: %w", err)
 	}
 	d.logger.Info("Validating claim", "head", l2Head, "output", outputRoot, "claim", claimedOutputRoot)
+	d.logger.Info("Validating claim2", "head", l2Head, "output", common.Hash(outputRoot), "claim", common.Hash(claimedOutputRoot))
 	if claimedOutputRoot != outputRoot {
 		return fmt.Errorf("%w: claim: %v actual: %v", ErrClaimNotValid, claimedOutputRoot, outputRoot)
 	}
