@@ -23,7 +23,7 @@ type SingularBatch struct {
 	ParentHash   common.Hash  // parent L2 block hash
 	EpochNum     rollup.Epoch // aka l1 num
 	EpochHash    common.Hash  // l1 block hash
-	Timestamp    uint64
+	Timestamp    uint64       // millisecond
 	Transactions []hexutil.Bytes
 }
 
@@ -77,5 +77,8 @@ func GetSingularBatch(batchData *BatchData) (*SingularBatch, error) {
 	if !ok {
 		return nil, NewCriticalError(errors.New("failed type assertion to SingularBatch"))
 	}
+
+	log.Info("convert singular batch timestamp", "before", singularBatch.Timestamp, "after", singularBatch.Timestamp*1000)
+	singularBatch.Timestamp = singularBatch.Timestamp * 1000
 	return singularBatch, nil
 }

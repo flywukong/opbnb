@@ -37,6 +37,7 @@ func (o *OracleEngine) L2OutputRoot(l2ClaimBlockNum uint64) (eth.Bytes32, error)
 	if outBlock == nil {
 		return eth.Bytes32{}, fmt.Errorf("failed to get L2 block at %d", l2ClaimBlockNum)
 	}
+	log.Info("out block info", "info", outBlock.Number)
 	stateDB, err := o.backend.StateAt(outBlock.Root)
 	if err != nil {
 		return eth.Bytes32{}, fmt.Errorf("failed to open L2 state db at block %s: %w", outBlock.Hash(), err)
@@ -45,6 +46,7 @@ func (o *OracleEngine) L2OutputRoot(l2ClaimBlockNum uint64) (eth.Bytes32, error)
 	if err != nil {
 		return eth.Bytes32{}, fmt.Errorf("withdrawals trie unavailable at block %v: %w", outBlock.Hash(), err)
 	}
+	log.Info("trie hash", "hash", withdrawalsTrie.Hash())
 	return rollup.ComputeL2OutputRootV0(eth.HeaderBlockInfo(outBlock), withdrawalsTrie.Hash())
 }
 
