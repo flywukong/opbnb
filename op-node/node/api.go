@@ -124,7 +124,7 @@ func (n *nodeAPI) OutputAtBlock(ctx context.Context, number hexutil.Uint64) (*et
 	if err != nil {
 		return nil, fmt.Errorf("failed to get L2 output at block %s: %w", ref, err)
 	}
-	log.Info("node api optimism_outputAtBlock ", "output info1",
+	log.Info("node api optimism_outputAtBlock ", "block number", number, "output info1",
 		output.MessagePasserStorageRoot, "output info2", output.StateRoot, "output", common.Hash(eth.OutputRoot(output)))
 	return &eth.OutputResponse{
 		Version:               output.Version(),
