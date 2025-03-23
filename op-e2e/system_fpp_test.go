@@ -232,7 +232,7 @@ func testVerifyL2OutputRoot(t *testing.T, detached bool, spanBatchActivated bool
 	require.NoError(t, err, "could not retrieve l2 agreed block")
 	l2Head := agreedL2Output.BlockRef.Hash
 	l2OutputRoot := agreedL2Output.OutputRoot
-
+	log.Info("agreed l2 output", "hash", common.Hash(l2OutputRoot))
 	t.Log("Sending transactions to modify existing state, within challenged period")
 	SendDepositTx(t, cfg, l1Client, l2Seq, opts, func(l2Opts *DepositTxOpts) {
 		l2Opts.Value = big.NewInt(5_000)
@@ -252,6 +252,8 @@ func testVerifyL2OutputRoot(t *testing.T, detached bool, spanBatchActivated bool
 	l2Output, err := rollupClient.OutputAtBlock(ctx, l2ClaimBlockNumber)
 	require.NoError(t, err, "could not get expected output")
 	l2Claim := l2Output.OutputRoot
+	log.Info("claim l2 output", "root", common.Hash(l2Claim),
+		"stateroot", l2Output.StateRoot, "storage", l2Output.WithdrawalStorageRoot)
 
 	t.Log("Determine L1 head that includes all batches required for L2 claim block")
 	require.NoError(t, waitForSafeHead(ctx, l2ClaimBlockNumber, rollupClient))
