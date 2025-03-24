@@ -72,13 +72,16 @@ func (b *SingularBatch) decode(r *bytes.Reader) error {
 }
 
 // GetSingularBatch retrieves SingularBatch from batchData
-func GetSingularBatch(batchData *BatchData) (*SingularBatch, error) {
+func GetSingularBatch(batchData *BatchData, rollupCfg *rollup.Config) (*SingularBatch, error) {
 	singularBatch, ok := batchData.inner.(*SingularBatch)
 	if !ok {
 		return nil, NewCriticalError(errors.New("failed type assertion to SingularBatch"))
 	}
 
-	//log.Info("convert singular batch timestamp", "before", singularBatch.Timestamp, "after", singularBatch.Timestamp*1000)
-	//singularBatch.Timestamp = singularBatch.Timestamp * 1000
+	if !rollupCfg.IsVolta(singularBatch.Timestamp) {
+		log.Info("convert singular batch to milliseconds timestamp", "time", singularBatch.Timestamp*1000)
+		singularBatch.Timestamp = singularBatch.Timestamp * 1000
+	}
+
 	return singularBatch, nil
 }
