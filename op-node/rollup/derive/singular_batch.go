@@ -78,7 +78,7 @@ func GetSingularBatch(batchData *BatchData) (*SingularBatch, error) {
 		return nil, NewCriticalError(errors.New("failed type assertion to SingularBatch"))
 	}
 
-	log.Info("convert singular batch timestamp", "before", singularBatch.Timestamp, "after", singularBatch.Timestamp*1000)
-	singularBatch.Timestamp = singularBatch.Timestamp * 1000
+	//log.Info("convert singular batch timestamp", "before", singularBatch.Timestamp, "after", singularBatch.Timestamp*1000)
+	//singularBatch.Timestamp = singularBatch.Timestamp * 1000
 	return singularBatch, nil
 }
