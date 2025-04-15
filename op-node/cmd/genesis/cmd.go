@@ -184,24 +184,31 @@ var Subcommands = cli.Commands{
 				if err != nil {
 					return fmt.Errorf("cannot dial %s: %w", l1RPC, err)
 				}
-
+				log.Info("get l1 client", "rpc", l1RPC, "tag", config.L1StartingBlockTag,
+					"hash,", config.L1StartingBlockTag.BlockHash, "blocknumber", config.L1StartingBlockTag.BlockNumber)
 				if config.L1StartingBlockTag == nil {
+					log.Info("test1")
 					l1StartBlock, err = client.BlockByNumber(context.Background(), nil)
 					if err != nil {
 						return fmt.Errorf("cannot fetch latest block: %w", err)
 					}
+					fmt.Println("l1 start block info", "num", l1StartBlock.NumberU64(), "hash", l1StartBlock.Hash())
 					tag := rpc.BlockNumberOrHashWithHash(l1StartBlock.Hash(), true)
 					config.L1StartingBlockTag = (*genesis.MarshalableRPCBlockNumberOrHash)(&tag)
 				} else if config.L1StartingBlockTag.BlockHash != nil {
+					log.Info("Test2")
 					l1StartBlock, err = client.BlockByHash(context.Background(), *config.L1StartingBlockTag.BlockHash)
 					if err != nil {
 						return fmt.Errorf("cannot fetch block by hash: %w", err)
 					}
+					log.Info("l1 start block info", "num", l1StartBlock.NumberU64(), "hash", l1StartBlock.Hash())
 				} else if config.L1StartingBlockTag.BlockNumber != nil {
+					log.Info("test3")
 					l1StartBlock, err = client.BlockByNumber(context.Background(), big.NewInt(config.L1StartingBlockTag.BlockNumber.Int64()))
 					if err != nil {
 						return fmt.Errorf("cannot fetch block by number: %w", err)
 					}
+					log.Info("l1 start block info", "num", l1StartBlock.NumberU64(), "hash", l1StartBlock.Hash().String(), "hash2", l1StartBlock.Hash())
 				}
 			}
 
@@ -216,7 +223,7 @@ var Subcommands = cli.Commands{
 				return err
 			}
 
-			log.Info("Using L1 Start Block", "number", l1StartBlock.Number(), "hash", l1StartBlock.Hash().Hex())
+			log.Info("Using L1 Start Block", "number", l1StartBlock.Number(), "hash", l1StartBlock.Hash().Hex(), "hash2", l1StartBlock.Hash().String(), "hash3", l1StartBlock.Hash())
 
 			// Build the L2 genesis block
 			l2Genesis, err := genesis.BuildL2Genesis(config, l2Allocs, l1StartBlock)
