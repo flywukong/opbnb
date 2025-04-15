@@ -203,7 +203,7 @@ var Subcommands = cli.Commands{
 					}
 					log.Info("l1 start block info", "num", l1StartBlock.NumberU64(), "hash", l1StartBlock.Hash())
 				} else if config.L1StartingBlockTag.BlockNumber != nil {
-					log.Info("test3")
+					log.Info("test3", "block number", config.L1StartingBlockTag.BlockNumber.Int64())
 					l1StartBlock, err = client.BlockByNumber(context.Background(), big.NewInt(config.L1StartingBlockTag.BlockNumber.Int64()))
 					if err != nil {
 						return fmt.Errorf("cannot fetch block by number: %w", err)
